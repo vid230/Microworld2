@@ -18,6 +18,11 @@ protected:
   std::mt19937_64* rng;
   Symbols symbols;
   Costs costs;
+  
+  int trap_scan_step;
+
+  bool FrontIsWall(const Percepts& percepts) const;
+  bool RayHasTreasure(const std::vector<std::string>& ray) const;
 public:
   AI();
   AI(
