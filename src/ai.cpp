@@ -68,17 +68,74 @@ bool AI::RayHasTreasure(const std::vector<std::string>& ray) const
   return false;
 }
 
-std::vector<std::string> AI::Run(
-    Percepts & percepts,
-    AgentComm * comms
-) {
-  std::cout << "------------------------------------------------\n";
-  std::cout << "AGENT ID: " << id << std::endl;
-  PrintPercepts(percepts);
-  std::vector<std::string> cmds {"R", "B", "L", "F", "U", "D"};
-  std::shuffle(cmds.begin(), cmds.end(), *rng);
-  std::cout << "CMD:      " << cmds[0] << std::endl;
-  return {cmds[0]};
+std::vector<std::string> AI::Run(Percepts & percepts, AgentComm * comms)
+{
+  // 1. If standing on treasure, take it.
+  if (!percepts.current.empty() && percepts.current[0] == symbols.treasure)
+  {
+    return {"T"};
+  }
+
+  // 2. If a trap is adjacent, scan/disarm around us. detector == 1 means the nearest trap is one cell away.
+  if (percepts.detector == 1)
+  {
+    bool front_is_wall = FrontIsWall(percepts);
+
+    if (trap_scan_step % 2 == 0 && !front_is_wall)
+    {
+      trap_scan_step++;
+      return {"D"};
+    }
+    else
+    {
+      trap_scan_step++;
+      return {"R"};
+    }
+  }
+  else
+  {
+    trap_scan_step = 0;
+  }
+
+  // 3. If we see treasure, move toward it.
+  if (RayHasTreasure(percepts.forward))
+  {
+    if (!FrontIsWall(percepts))
+    {
+      return {"F"};
+    }
+  }
+
+  if (RayHasTreasure(percepts.left))
+  {
+    return {"L"};
+  }
+
+  if (RayHasTreasure(percepts.right))
+  {
+    return {"R"};
+  }
+
+  if (RayHasTreasure(percepts.backward))
+  {
+    return {"R"};
+  }
+
+  // 4. Basic exploration: move forward if possible.
+  if (!FrontIsWall(percepts))
+  {
+    return {"F"};
+  }
+
+  // 5. If blocked, turn randomly left or right.
+  if ((*rng)() % 2 == 0)
+  {
+    return {"L"};
+  }
+  else
+  {
+    return {"R"};
+  }
 }
 
 
