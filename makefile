@@ -1,4 +1,4 @@
-CC=g++ # define the compiler to use
+CC=C:\mingw32\bin\g++ # define the compiler to use
 TARGET=microworld # define the name of the executable
 
 # RELEASE
@@ -6,10 +6,10 @@ TARGET=microworld # define the name of the executable
 # DEBUG
 CFLAGS= -c -std=c++17 -g3
 
-LFLAGS= -Llib -lm -lsfml-graphics -lsfml-window -lsfml-system
+LFLAGS= -Llib -LC:\SFML\lib -LC:\mingw32\lib -lm -lsfml-graphics -lsfml-window -lsfml-system
 SRCDIR = src
 OBJDIR = obj
-INCLUDE = -Iinc
+INCLUDE = -Iinc -IC:\SFML\include -IC:\mingw32\include
 SOURCES = $(foreach d,$(SRCDIR),$(wildcard $(d)/*.cpp))
 OBJECTS = $(foreach d,$(SRCDIR),$(subst $(d),$(OBJDIR),$(wildcard $(d)/*.cpp)))
 
