@@ -40,6 +40,34 @@ void AI::PrintPercepts(const Percepts & percepts) {
   }
 }
 
+bool AI::FrontIsWall(const Percepts& percepts) const
+{
+  if (percepts.forward.empty())
+  {
+    return false;
+  }
+
+  return percepts.forward[0] == symbols.wall;
+}
+
+bool AI::RayHasTreasure(const std::vector<std::string>& ray) const
+{
+  for (const std::string& cell : ray)
+  {
+    if (cell == symbols.treasure)
+    {
+      return true;
+    }
+
+    if (cell == symbols.wall)
+    {
+      return false;
+    }
+  }
+
+  return false;
+}
+
 std::vector<std::string> AI::Run(
     Percepts & percepts,
     AgentComm * comms
