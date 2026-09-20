@@ -53,6 +53,16 @@ protected:
 
   bool FrontIsWall(const Percepts& percepts) const;
   bool RayHasTreasure(const std::vector<std::string>& ray) const;
+
+  Point DirVec(int d) const;
+  Point Add(Point a, Point b) const;
+  Point Mul(Point a, int k) const;
+
+  void ApplyLastCommand();
+  void RememberCell(Point p, const std::string& cell);
+  void IntegrateRay(Point start, Point step, const std::vector<std::string>& ray);
+  void IntegratePercepts(const Percepts& percepts);
+  void SaveIssuedCommand(const std::string& cmd);
 public:
   AI();
   AI(
