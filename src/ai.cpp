@@ -180,7 +180,7 @@ std::vector<std::string> AI::Run(Percepts & percepts, AgentComm * comms)
   // 1. If standing on treasure, take it.
   if (!percepts.current.empty() && percepts.current[0] == symbols.treasure)
   {
-    return {"T"};
+    return issue("T");
   }
 
   // 2. If a trap is adjacent, scan/disarm around us. detector == 1 means the nearest trap is one cell away.
@@ -191,12 +191,12 @@ std::vector<std::string> AI::Run(Percepts & percepts, AgentComm * comms)
     if (trap_scan_step % 2 == 0 && !front_is_wall)
     {
       trap_scan_step++;
-      return {"D"};
+      return issue("D");
     }
     else
     {
       trap_scan_step++;
-      return {"R"};
+      return issue("R");
     }
   }
   else
@@ -209,39 +209,39 @@ std::vector<std::string> AI::Run(Percepts & percepts, AgentComm * comms)
   {
     if (!FrontIsWall(percepts))
     {
-      return {"F"};
+      return issue("F");
     }
   }
 
   if (RayHasTreasure(percepts.left))
   {
-    return {"L"};
+    return issue("L");
   }
 
   if (RayHasTreasure(percepts.right))
   {
-    return {"R"};
+    return issue("R");
   }
 
   if (RayHasTreasure(percepts.backward))
   {
-    return {"R"};
+    return issue("R");
   }
 
   // 4. Basic exploration: move forward if possible.
   if (!FrontIsWall(percepts))
   {
-    return {"F"};
+    return issue("F");
   }
 
   // 5. If blocked, turn randomly left or right.
   if ((*rng)() % 2 == 0)
   {
-    return {"L"};
+    return issue("L");
   }
   else
   {
-    return {"R"};
+    return issue("R");
   }
 }
 
