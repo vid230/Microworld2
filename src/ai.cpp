@@ -69,6 +69,38 @@ bool AI::RayHasTreasure(const std::vector<std::string>& ray) const
   return false;
 }
 
+AI::Point AI::DirVec(int d) const
+{
+  int r = ((d % 4) + 4) % 4;
+
+  if (r == 0)
+  {
+    return Point(0, -1);
+  }
+
+  if (r == 1)
+  {
+    return Point(1, 0);
+  }
+
+  if (r == 2)
+  {
+    return Point(0, 1);
+  }
+
+  return Point(-1, 0);
+}
+
+AI::Point AI::Add(Point a, Point b) const
+{
+  return Point(a.x + b.x, a.y + b.y);
+}
+
+AI::Point AI::Mul(Point a, int k) const
+{
+  return Point(a.x * k, a.y * k);
+}
+
 std::vector<std::string> AI::Run(Percepts & percepts, AgentComm * comms)
 {
   // 1. If standing on treasure, take it.
