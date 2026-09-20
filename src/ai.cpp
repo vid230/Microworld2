@@ -153,6 +153,11 @@ void AI::IntegratePercepts(const Percepts& percepts)
   IntegrateRay(Add(pos, left), left, percepts.left);
 }
 
+void AI::SaveIssuedCommand(const std::string& cmd)
+{
+  last_cmd = cmd;
+}
+
 std::vector<std::string> AI::Run(Percepts & percepts, AgentComm * comms)
 {
   // 1. If standing on treasure, take it.
