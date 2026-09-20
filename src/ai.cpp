@@ -171,6 +171,12 @@ std::vector<std::string> AI::Run(Percepts & percepts, AgentComm * comms)
 
   IntegratePercepts(percepts);
 
+  auto issue = [&](const std::string& cmd)
+  {
+    SaveIssuedCommand(cmd);
+    return std::vector<std::string>{cmd};
+  };
+
   // 1. If standing on treasure, take it.
   if (!percepts.current.empty() && percepts.current[0] == symbols.treasure)
   {
