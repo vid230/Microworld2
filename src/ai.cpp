@@ -137,7 +137,20 @@ void AI::IntegrateRay(Point start, Point step, const std::vector<std::string>& r
 
 void AI::IntegratePercepts(const Percepts& percepts)
 {
-  //
+  if (!percepts.current.empty())
+  {
+    RememberCell(pos, percepts.current[0]);
+  }
+
+  Point forward = DirVec(dir);
+  Point right = DirVec(dir + 1);
+  Point backward = DirVec(dir + 2);
+  Point left = DirVec(dir + 3);
+
+  IntegrateRay(Add(pos, forward), forward, percepts.forward);
+  IntegrateRay(Add(pos, right), right, percepts.right);
+  IntegrateRay(Add(pos, backward), backward, percepts.backward);
+  IntegrateRay(Add(pos, left), left, percepts.left);
 }
 
 std::vector<std::string> AI::Run(Percepts & percepts, AgentComm * comms)
