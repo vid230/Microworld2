@@ -3,7 +3,7 @@
 /***************************************************************
 AI CLASS DEFINITION
 */
-AI::AI() : trap_scan_step(0) {}
+AI::AI() : trap_scan_step(0), initialized(false), pos(0, 0), dir(0), last_cmd("") {}
 AI::AI(
     unsigned id, 
     unsigned agent_speed,
@@ -12,7 +12,8 @@ AI::AI(
     Costs costs
 )
   : id(id), agent_speed(agent_speed), rng(rng),
-    symbols(symbols), costs(costs), trap_scan_step(0)
+    symbols(symbols), costs(costs), trap_scan_step(0),
+    initialized(false), pos(0, 0), dir(0), last_cmd("")
 {}
 
 void AI::PrintPercepts(const Percepts & percepts) {
