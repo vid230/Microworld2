@@ -101,6 +101,26 @@ AI::Point AI::Mul(Point a, int k) const
   return Point(a.x * k, a.y * k);
 }
 
+void AI::ApplyLastCommand()
+{
+  if (last_cmd == "F")
+  {
+    pos = Add(pos, DirVec(dir));
+  }
+  else if (last_cmd == "B")
+  {
+    pos = Add(pos, Mul(DirVec(dir), -1));
+  }
+  else if (last_cmd == "L")
+  {
+    dir = (dir + 3) % 4;
+  }
+  else if (last_cmd == "R")
+  {
+    dir = (dir + 1) % 4;
+  }
+}
+
 std::vector<std::string> AI::Run(Percepts & percepts, AgentComm * comms)
 {
   // 1. If standing on treasure, take it.
