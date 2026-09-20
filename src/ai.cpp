@@ -121,6 +121,25 @@ void AI::ApplyLastCommand()
   }
 }
 
+void AI::RememberCell(Point p, const std::string& cell)
+{
+  known_map[p] = cell;
+}
+
+void AI::IntegrateRay(Point start, Point step, const std::vector<std::string>& ray)
+{
+  for (size_t i = 0; i < ray.size(); i++)
+  {
+    Point p = Add(start, Mul(step, static_cast<int>(i)));
+    RememberCell(p, ray[i]);
+  }
+}
+
+void AI::IntegratePercepts(const Percepts& percepts)
+{
+  //
+}
+
 std::vector<std::string> AI::Run(Percepts & percepts, AgentComm * comms)
 {
   // 1. If standing on treasure, take it.
