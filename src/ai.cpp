@@ -160,6 +160,17 @@ void AI::SaveIssuedCommand(const std::string& cmd)
 
 std::vector<std::string> AI::Run(Percepts & percepts, AgentComm * comms)
 {
+  if (!initialized)
+  {
+    initialized = true;
+  }
+  else
+  {
+    ApplyLastCommand();
+  }
+
+  IntegratePercepts(percepts);
+
   // 1. If standing on treasure, take it.
   if (!percepts.current.empty() && percepts.current[0] == symbols.treasure)
   {
