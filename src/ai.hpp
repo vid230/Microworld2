@@ -44,6 +44,13 @@ protected:
   
   int trap_scan_step;
 
+  bool initialized;
+  Point pos;
+  int dir;
+  std::string last_cmd;
+
+  std::map<Point, std::string> known_map;
+
   bool FrontIsWall(const Percepts& percepts) const;
   bool RayHasTreasure(const std::vector<std::string>& ray) const;
 public:
