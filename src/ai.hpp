@@ -18,6 +18,29 @@ protected:
   std::mt19937_64* rng;
   Symbols symbols;
   Costs costs;
+
+  struct Point
+  {
+    int x;
+    int y;
+
+    Point(int x = 0, int y = 0) : x(x), y(y) {}
+
+    bool operator<(const Point& other) const
+    {
+      if (x != other.x)
+      {
+        return x < other.x;
+      }
+
+      return y < other.y;
+    }
+
+    bool operator==(const Point& other) const
+    {
+      return ((x == other.x) && (y == other.y));
+    }
+  };
   
   int trap_scan_step;
 
