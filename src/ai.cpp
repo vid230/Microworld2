@@ -177,6 +177,43 @@ bool AI::IsKnownTreasure(Point p) const
   return it->second == symbols.treasure;
 }
 
+std::string AI::CommandTowardDirection(int target_dir) const
+{
+  target_dir = ((target_dir % 4) + 4) % 4;
+
+  if (target_dir == dir)
+  {
+    return "F";
+  }
+
+  if (target_dir == (dir + 1) % 4)
+  {
+    return "R";
+  }
+
+  if (target_dir == (dir + 3) % 4)
+  {
+    return "L";
+  }
+
+  return "B";
+}
+
+std::string AI::FirstStepCommand(Point next) const
+{
+  Point delta(next.x - pos.x, next.y - pos.y);
+
+  for (int d = 0; d < 4; d++)
+  {
+    if (DirVec(d) == delta)
+    {
+      return CommandTowardDirection(d);
+    }
+  }
+
+  return "R";
+}
+
 void AI::SaveIssuedCommand(const std::string& cmd)
 {
   last_cmd = cmd;
