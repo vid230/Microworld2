@@ -125,6 +125,11 @@ void AI::ApplyLastCommand()
 void AI::RememberCell(Point p, const std::string& cell)
 {
   known_map[p] = cell;
+
+  if (IsDefinitelySafeCell(cell))
+  {
+    MarkSafe(p);
+  }
 }
 
 void AI::IntegrateRay(Point start, Point step, const std::vector<std::string>& ray)
