@@ -214,6 +214,59 @@ std::string AI::FirstStepCommand(Point next) const
   return "R";
 }
 
+bool AI::FindPath(Point target, std::vector<Point>& path) const
+{
+  std::queue<Point> q;
+  std::set<Point> visited;
+  std::map<Point, Point> parent;
+
+  q.push(pos);
+  visited.insert(pos);
+
+  while (!q.empty())
+  {
+    Point current = q.front();
+    q.pop();
+
+    if (current == target)
+    {
+      path.clear();
+
+      Point p = target;
+
+      while (!(p == pos))
+      {
+        path.push_back(p);
+        p = parent[p];
+      }
+
+      std::reverse(path.begin(), path.end());
+      return true;
+    }
+
+    for (int d = 0; d < 4; d++)
+    {
+      Point next = Add(current, DirVec(d));
+
+      if (visited.find(next) != visited.end())
+      {
+        continue;
+      }
+
+      if (!IsKnownPassable(next))
+      {
+        continue;
+      }
+
+      visited.insert(next);
+      parent[next] = current;
+      q.push(next);
+    }
+  }
+
+  return false;
+}
+
 void AI::SaveIssuedCommand(const std::string& cmd)
 {
   last_cmd = cmd;
