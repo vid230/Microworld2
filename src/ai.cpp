@@ -267,6 +267,38 @@ bool AI::FindPath(Point target, std::vector<Point>& path) const
   return false;
 }
 
+bool AI::FindNearestKnownTreasure(std::vector<Point>& path) const
+{
+  bool found = false;
+  std::vector<Point> best_path;
+
+  for (std::map<Point, std::string>::const_iterator it = known_map.begin(); it != known_map.end(); ++it)
+  {
+    if (it->second != symbols.treasure)
+    {
+      continue;
+    }
+
+    std::vector<Point> candidate_path;
+
+    if (FindPath(it->first, candidate_path))
+    {
+      if (!found || candidate_path.size() < best_path.size())
+      {
+        found = true;
+        best_path = candidate_path;
+      }
+    }
+  }
+
+  if (found)
+  {
+    path = best_path;
+  }
+
+  return found;
+}
+
 void AI::SaveIssuedCommand(const std::string& cmd)
 {
   last_cmd = cmd;
