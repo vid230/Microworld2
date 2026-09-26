@@ -3,7 +3,7 @@
 /***************************************************************
 AI CLASS DEFINITION
 */
-AI::AI() : trap_scan_step(0), initialized(false), pos(0, 0), dir(0), last_cmd(""), has_last_disarm_target(false), last_disarm_target(0, 0) {}
+AI::AI() : trap_scan_step(0), initialized(false), pos(0, 0), dir(0), last_cmd(""), has_last_disarm_target(false), last_disarm_target(0, 0), last_seen_team_signal_count(0) {}
 AI::AI(
     unsigned id, 
     unsigned agent_speed,
@@ -14,7 +14,8 @@ AI::AI(
   : id(id), agent_speed(agent_speed), rng(rng),
     symbols(symbols), costs(costs), trap_scan_step(0),
     initialized(false), pos(0, 0), dir(0), last_cmd(""),
-    has_last_disarm_target(false), last_disarm_target(0, 0)
+    has_last_disarm_target(false), last_disarm_target(0, 0),
+    last_seen_team_signal_count(0)
 {}
 
 void AI::PrintPercepts(const Percepts & percepts) {
