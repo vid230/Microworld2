@@ -65,6 +65,15 @@ protected:
   void IntegrateRay(Point start, Point step, const std::vector<std::string>& ray);
   void IntegratePercepts(const Percepts& percepts);
   void SaveIssuedCommand(const std::string& cmd);
+
+  bool IsKnownPassable(Point p) const;
+  bool IsKnownTreasure(Point p) const;
+
+  std::string CommandTowardDirection(int target_dir) const;
+  std::string FirstStepCommand(Point next) const;
+
+  bool FindPath(Point target, std::vector<Point>& path) const;
+  bool FindNearestKnownTreasure(std::vector<Point>& path) const;
 public:
   AI();
   AI(
