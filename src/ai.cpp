@@ -153,6 +153,30 @@ void AI::IntegratePercepts(const Percepts& percepts)
   IntegrateRay(Add(pos, left), left, percepts.left);
 }
 
+bool AI::IsKnownPassable(Point p) const
+{
+  std::map<Point, std::string>::const_iterator it = known_map.find(p);
+
+  if (it == known_map.end())
+  {
+    return false;
+  }
+
+  return it->second != symbols.wall;
+}
+
+bool AI::IsKnownTreasure(Point p) const
+{
+  std::map<Point, std::string>::const_iterator it = known_map.find(p);
+
+  if (it == known_map.end())
+  {
+    return false;
+  }
+
+  return it->second == symbols.treasure;
+}
+
 void AI::SaveIssuedCommand(const std::string& cmd)
 {
   last_cmd = cmd;
