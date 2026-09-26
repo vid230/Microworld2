@@ -545,10 +545,19 @@ std::vector<std::string> AI::Run(Percepts & percepts, AgentComm * comms)
   }
 
   IntegratePercepts(percepts);
+  ResolveLastDisarmResult();
+  AnalyzeTrapDetector(percepts);
 
   auto issue = [&](const std::string& cmd)
   {
     SaveIssuedCommand(cmd);
+
+    if (cmd == "D")
+    {
+      last_disarm_target = Add(pos, DirVec(dir));
+      has_last_disarm_target = true;
+    }
+
     return std::vector<std::string>{cmd};
   };
 
