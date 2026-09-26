@@ -529,6 +529,32 @@ void AI::AnalyzeTrapDetector(const Percepts& percepts)
   }
 }
 
+void AI::UpdateOtherRogueCells(const Percepts& percepts)
+{
+  other_rogue_cells.clear();
+
+  Point forward = DirVec(dir);
+  Point right = DirVec(dir + 1);
+
+  for (size_t i = 0; i < percepts.others.size(); i++)
+  {
+    if (i == id)
+    {
+      continue;
+    }
+
+    Vec2 rel = percepts.others[i];
+
+    Point p = Add(pos, Add(Mul(right, rel.x), Mul(forward, rel.y)));
+    other_rogue_cells.insert(p);
+  }
+}
+
+bool AI::CellHasOtherRogue(Point p) const
+{
+  return other_rogue_cells.find(p) != other_rogue_cells.end();
+}
+
 void AI::SaveIssuedCommand(const std::string& cmd)
 {
   last_cmd = cmd;
