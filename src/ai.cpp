@@ -568,24 +568,11 @@ std::vector<std::string> AI::Run(Percepts & percepts, AgentComm * comms)
   }
 
   // 2. If a trap is adjacent, scan/disarm around us. detector == 1 means the nearest trap is one cell away.
-  if (percepts.detector == 1)
-  {
-    bool front_is_wall = FrontIsWall(percepts);
+  std::string trap_cmd;
 
-    if (trap_scan_step % 2 == 0 && !front_is_wall)
-    {
-      trap_scan_step++;
-      return issue("D");
-    }
-    else
-    {
-      trap_scan_step++;
-      return issue("R");
-    }
-  }
-  else
+  if (ChooseTrapAction(percepts, trap_cmd))
   {
-    trap_scan_step = 0;
+    return issue(trap_cmd);
   }
 
   std::vector<Point> treasure_path;
