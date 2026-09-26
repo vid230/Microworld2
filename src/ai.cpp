@@ -350,6 +350,14 @@ std::vector<std::string> AI::Run(Percepts & percepts, AgentComm * comms)
     trap_scan_step = 0;
   }
 
+  std::vector<Point> treasure_path;
+
+  if (FindNearestKnownTreasure(treasure_path) && !treasure_path.empty())
+  {
+    std::string cmd = FirstStepCommand(treasure_path[0]);
+    return issue(cmd);
+  }
+
   // 3. If we see treasure, move toward it.
   if (RayHasTreasure(percepts.forward))
   {
