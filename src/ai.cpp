@@ -311,6 +311,74 @@ bool AI::FindPath(Point target, std::vector<Point>& path) const
   return false;
 }
 
+bool AI::ChooseTrapAction(const Percepts& percepts, std::string& cmd) const
+{
+  if (percepts.detector != 1)
+  {
+    return false;
+  }
+
+  int best_dir = -1;
+  int best_score = -1;
+
+  for (int d = 0; d < 4; d++)
+  {
+    Point p = Add(pos, DirVec(d));
+
+    std::map<Point, std::string>::const_iterator it = known_map.find(p);
+
+    if ((it != known_map.end()) && (it->second == symbols.wall))
+    {
+      continue;
+    }
+
+    if (safe_cells.find(p) != safe_cells.end())
+    {
+      continue;
+    }
+
+    int score = 1;
+
+    std::map<Point, int>::const_iterator score_it = trap_score.find(p);
+    if (score_it != trap_score.end())
+    {
+      score = score_it->second;
+    }
+
+    if (score > best_score)
+    {
+      best_score = score;
+      best_dir = d;
+    }
+  }
+
+  if (best_dir == -1)
+  {
+    return false;
+  }
+
+  int normalized_dir = ((dir % 4) + 4) % 4;
+
+  if (best_dir == normalized_dir)
+  {
+    cmd = "D";
+  }
+  else if (best_dir == (normalized_dir + 1) % 4)
+  {
+    cmd = "R";
+  }
+  else if (best_dir == (normalized_dir + 3) % 4)
+  {
+    cmd = "L";
+  }
+  else {
+    // Target is behind us. Turn right first; next turn we can face it.
+    cmd = "R";
+  }
+
+  return true;
+}
+
 bool AI::FindNearestKnownTreasure(std::vector<Point>& path) const
 {
   bool found = false;
