@@ -300,6 +300,35 @@ bool AI::FindNearestKnownTreasure(std::vector<Point>& path) const
   return found;
 }
 
+int AI::Manhattan(Point a, Point b) const
+{
+  int dx = a.x - b.x;
+  int dy = a.y - b.y;
+
+  if (dx < 0)
+  {
+    dx = -dx;
+  }
+
+  if (dy < 0)
+  { 
+    dy = -dy;
+  }
+
+  return dx + dy;
+}
+
+bool AI::IsDefinitelySafeCell(const std::string& cell) const
+{
+  return ((cell == symbols.wall) || (cell == symbols.treasure) || (cell == symbols.disarmed_mine) || (cell == symbols.exploded_mine));
+}
+
+void AI::MarkSafe(Point p)
+{
+  safe_cells.insert(p);
+  trap_score.erase(p);
+}
+
 void AI::SaveIssuedCommand(const std::string& cmd)
 {
   last_cmd = cmd;
