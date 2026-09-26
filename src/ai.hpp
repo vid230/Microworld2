@@ -55,6 +55,9 @@ protected:
   std::set<Point> safe_cells;
   std::map<Point, int> trap_score;
 
+  std::set<Point> other_rogue_cells;
+  int last_seen_team_signal_count;
+
   bool has_last_disarm_target;
   Point last_disarm_target;
 
