@@ -171,6 +171,44 @@ bool AI::IsKnownPassable(Point p) const
   return it->second != symbols.wall;
 }
 
+bool AI::IsTrapSuspect(Point p) const
+{
+  return trap_score.find(p) != trap_score.end();
+}
+
+bool AI::IsKnownSafePassable(Point p) const
+{
+  std::map<Point, std::string>::const_iterator it = known_map.find(p);
+
+  if (it == known_map.end())
+  {
+    return false;
+  }
+
+  if (it->second == symbols.wall)
+  {
+    return false;
+  }
+
+  if ((it->second == symbols.treasure) || (it->second == symbols.disarmed_mine) || (it->second == symbols.exploded_mine))
+  {
+    return true;
+  }
+
+  if (safe_cells.find(p) != safe_cells.end())
+  {
+    return true;
+  }
+
+  if (IsTrapSuspect(p))
+  {
+    return false;
+  }
+
+  // If we know it and it is not currently suspicious, allow it.
+  return true;
+}
+
 bool AI::IsKnownTreasure(Point p) const
 {
   std::map<Point, std::string>::const_iterator it = known_map.find(p);
