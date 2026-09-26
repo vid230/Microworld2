@@ -95,6 +95,13 @@ protected:
   bool IsKnownSafePassable(Point p) const;
 
   bool ChooseTrapAction(const Percepts& percepts, std::string& cmd) const;
+
+  void UpdateOtherRogueCells(const Percepts& percepts);
+  bool CellHasOtherRogue(Point p) const;
+
+  bool HasKnownTreasure() const;
+  unsigned EncodeStatusSignal(const Percepts& percepts) const;
+  void UseCommunication(AgentComm* comms, const Percepts& percepts);
 public:
   AI();
   AI(
