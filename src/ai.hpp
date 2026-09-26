@@ -52,6 +52,11 @@ protected:
   std::string last_cmd;
 
   std::map<Point, std::string> known_map;
+  std::set<Point> safe_cells;
+  std::map<Point, int> trap_score;
+
+  bool has_last_disarm_target;
+  Point last_disarm_target;
 
   bool FrontIsWall(const Percepts& percepts) const;
   bool RayHasTreasure(const std::vector<std::string>& ray) const;
