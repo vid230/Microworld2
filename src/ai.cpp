@@ -334,6 +334,29 @@ void AI::MarkSafe(Point p)
   trap_score.erase(p);
 }
 
+void AI::ResolveLastDisarmResult()
+{
+  if (!has_last_disarm_target)
+  {
+    return;
+  }
+
+  std::map<Point, std::string>::const_iterator it = known_map.find(last_disarm_target);
+
+  if (it != known_map.end())
+  {
+    // If it became disarmed/exploded, RememberCell already marks it safe.
+    // If it is still open-looking, then my D command probably failed,
+    // so the target cell is probably not a trap.
+    if ((it->second != symbols.disarmed_mine) && (it->second != symbols.exploded_mine))
+    {
+      MarkSafe(last_disarm_target);
+    }
+  }
+
+  has_last_disarm_target = false;
+}
+
 void AI::SaveIssuedCommand(const std::string& cmd)
 {
   last_cmd = cmd;
