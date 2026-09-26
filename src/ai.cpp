@@ -357,6 +357,71 @@ void AI::ResolveLastDisarmResult()
   has_last_disarm_target = false;
 }
 
+void AI::AnalyzeTrapDetector(const Percepts& percepts)
+{
+  // Current cell is always safe, because the rogue is alive.
+  MarkSafe(pos);
+
+  // If there are no traps left, every known non-wall cell is safe.
+  if (percepts.detector == -1)
+  {
+    trap_score.clear();
+
+    for (std::map<Point, std::string>::const_iterator it = known_map.begin(); it != known_map.end(); ++it)
+    {
+      if (it->second != symbols.wall)
+      {
+        MarkSafe(it->first);
+      }
+    }
+
+    return;
+  }
+
+  int d = percepts.detector;
+
+  // Any known cell closer than the nearest trap distance cannot be a trap.
+  for (std::map<Point, std::string>::const_iterator it = known_map.begin(); it != known_map.end(); ++it)
+  {
+    Point p = it->first;
+    const std::string& cell = it->second;
+
+    if (cell == symbols.wall)
+    {
+      MarkSafe(p);
+      continue;
+    }
+
+    if (Manhattan(pos, p) < d)
+    {
+      MarkSafe(p);
+    }
+  }
+
+  // Cells exactly at detector distance are suspicious.
+  // We only score known non-wall cells.
+  for (std::map<Point, std::string>::const_iterator it = known_map.begin(); it != known_map.end(); ++it)
+  {
+    Point p = it->first;
+    const std::string& cell = it->second;
+
+    if (cell == symbols.wall)
+    {
+      continue;
+    }
+
+    if (safe_cells.find(p) != safe_cells.end())
+    {
+      continue;
+    }
+
+    if (Manhattan(pos, p) == d)
+    {
+      trap_score[p]++;
+    }
+  }
+}
+
 void AI::SaveIssuedCommand(const std::string& cmd)
 {
   last_cmd = cmd;
