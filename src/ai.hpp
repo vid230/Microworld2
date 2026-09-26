@@ -79,6 +79,19 @@ protected:
 
   bool FindPath(Point target, std::vector<Point>& path) const;
   bool FindNearestKnownTreasure(std::vector<Point>& path) const;
+
+  int Manhattan(Point a, Point b) const;
+
+  bool IsDefinitelySafeCell(const std::string& cell) const;
+  void MarkSafe(Point p);
+
+  void ResolveLastDisarmResult();
+  void AnalyzeTrapDetector(const Percepts& percepts);
+
+  bool IsTrapSuspect(Point p) const;
+  bool IsKnownSafePassable(Point p) const;
+
+  bool ChooseTrapAction(const Percepts& percepts, std::string& cmd) const;
 public:
   AI();
   AI(
