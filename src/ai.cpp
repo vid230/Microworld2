@@ -297,7 +297,7 @@ bool AI::FindPath(Point target, std::vector<Point>& path) const
         continue;
       }
 
-      if (!IsKnownPassable(next))
+      if (!IsKnownSafePassable(next))
       {
         continue;
       }
