@@ -9,6 +9,8 @@
 #include<fstream>
 #include"percepts.hpp"
 #include"comm.hpp"
+#include <queue>
+#include <set>
 
 class AI {
 protected:
