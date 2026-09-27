@@ -738,6 +738,18 @@ std::vector<std::string> AI::Run(Percepts & percepts, AgentComm * comms)
     return issue("F");
   }
 
+  if (CellHasOtherRogue(front))
+  {
+    if ((*rng)() % 2 == 0)
+    {
+      return issue("L");
+    }
+    else
+    {
+      return issue("R");
+    }
+  }
+
   // 5. If blocked, turn randomly left or right.
   if ((*rng)() % 2 == 0)
   {
