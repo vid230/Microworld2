@@ -613,6 +613,37 @@ unsigned AI::EncodeStatusSignal(const Percepts& percepts) const
   return signal;
 }
 
+void AI::UseCommunication(AgentComm* comms, const Percepts& percepts)
+{
+  if (comms == nullptr)
+  {
+    return;
+  }
+
+  if (static_cast<int>(id) < comms->GetNumAgents())
+  {
+    comms->SetSignal(id, EncodeStatusSignal(percepts));
+  }
+
+  last_seen_team_signal_count = 0;
+
+  for (int i = 0; i < comms->GetNumAgents(); i++)
+  {
+    if (static_cast<unsigned>(i) == id)
+    {
+      continue;
+    }
+
+    unsigned signal = comms->GetSignal(i);
+
+    // Check signature: top 4 bits should be 0xA.
+    if ((signal >> 28) == 0xAu)
+    {
+      last_seen_team_signal_count++;
+    }
+  }
+}
+
 void AI::SaveIssuedCommand(const std::string& cmd)
 {
   last_cmd = cmd;
