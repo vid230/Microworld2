@@ -733,7 +733,7 @@ std::vector<std::string> AI::Run(Percepts & percepts, AgentComm * comms)
   // 4. Basic exploration: move forward if possible.
   Point front = Add(pos, DirVec(dir));
 
-  if ((!FrontIsWall(percepts)) && (IsKnownSafePassable(front)))
+  if ((!FrontIsWall(percepts)) && (IsKnownSafePassable(front)) && (!CellHasOtherRogue(front)))
   {
     return issue("F");
   }
