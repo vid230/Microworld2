@@ -303,6 +303,11 @@ bool AI::FindPath(Point target, std::vector<Point>& path) const
         continue;
       }
 
+      if ((CellHasOtherRogue(next)) && !(next == target))
+      {
+        continue;
+      }
+
       visited.insert(next);
       parent[next] = current;
       q.push(next);
