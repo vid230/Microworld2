@@ -555,6 +555,64 @@ bool AI::CellHasOtherRogue(Point p) const
   return other_rogue_cells.find(p) != other_rogue_cells.end();
 }
 
+bool AI::HasKnownTreasure() const
+{
+  for (std::map<Point, std::string>::const_iterator it = known_map.begin(); it != known_map.end(); ++it)
+  {
+    if (it->second == symbols.treasure)
+    {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+unsigned AI::EncodeStatusSignal(const Percepts& percepts) const
+{
+  unsigned signal = 0;
+
+  // Signature, so our signal is recognizable.
+  signal |= (0xAu << 28);
+
+  // Agent id.
+  signal |= ((id & 0xFFu) << 20);
+
+  // Status mode.
+  // 1 = trap nearby
+  // 2 = standing on treasure
+  // 3 = knows treasure somewhere
+  // 4 = exploring
+  unsigned mode = 4;
+
+  if (percepts.detector == 1)
+  {
+    mode = 1;
+  }
+  else if ((!percepts.current.empty()) && (percepts.current[0] == symbols.treasure))
+  {
+    mode = 2;
+  }
+  else if (HasKnownTreasure())
+  {
+    mode = 3;
+  }
+
+  signal |= ((mode & 0xFu) << 16);
+
+  // Detector value. 31 means "no trap" or unknown for communication purposes.
+  unsigned detector_value = 31;
+
+  if ((percepts.detector >= 0) && (percepts.detector < 31))
+  {
+    detector_value = static_cast<unsigned>(percepts.detector);
+  }
+
+  signal |= detector_value;
+
+  return signal;
+}
+
 void AI::SaveIssuedCommand(const std::string& cmd)
 {
   last_cmd = cmd;
