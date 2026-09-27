@@ -663,6 +663,8 @@ std::vector<std::string> AI::Run(Percepts & percepts, AgentComm * comms)
   IntegratePercepts(percepts);
   ResolveLastDisarmResult();
   AnalyzeTrapDetector(percepts);
+  UpdateOtherRogueCells(percepts);
+  UseCommunication(comms, percepts);
 
   auto issue = [&](const std::string& cmd)
   {
